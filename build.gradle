@@ -1,0 +1,54 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '6.5.0.3'
+    id 'org.springframework.boot' version '2.7.6'
+    id 'io.github.lognet.grpc-spring-boot' version '4.9.1'
+}
+
+group "my.project"
+version "SNAPSHOT"
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    testContainersVersion = '1.17.6'
+    shedlockVersion = '4.43.0'
+}
+
+dependencies {
+    implementation platform(SpringBootPlugin.BOM_COORDINATES)
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.5")
+
+    implementation("org.springframework.boot:spring-boot-starter-web:")
+    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("net.javacrumbs.shedlock:shedlock-spring:${shedlockVersion}")
+    implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:${shedlockVersion}")
+    implementation("org.flywaydb:flyway-core")
+    runtimeOnly("org.postgresql:postgresql")
+
+    // db emulation
+    implementation("org.testcontainers:testcontainers:${testContainersVersion}")
+    implementation("org.testcontainers:postgresql:${testContainersVersion}")
+
+    // kafka broker emulation
+    implementation("org.testcontainers:kafka:${testContainersVersion}")
+
+    // tracing
+    implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
+    implementation("io.zipkin.brave:brave-instrumentation-grpc")
+
+    // testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test:")
+    testImplementation("org.testcontainers:junit-jupiter:${testContainersVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}

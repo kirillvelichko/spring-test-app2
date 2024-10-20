@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app2
+data:
+  JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=80
+  TZ: Europe/Moscow
+  HTTP_PORT: "80"
+  GRPC_PORT: "9000"
+  LOG_LEVEL: INFO
